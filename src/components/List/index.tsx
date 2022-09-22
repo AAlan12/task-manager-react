@@ -1,15 +1,10 @@
-import React from "react";
+import { ITask } from "../../types/tasks";
 import Item from "./Item";
 import style from './List.module.scss'
 
-function List(){
-    const tasks = [{
-        task: 'Study react',
-        time: '02:00:00'
-    }, {
-        task: 'Clean room',
-        time: '01:47:00'
-    }]
+
+
+function List({tasks}: {tasks: ITask[]}){    
     return(
         <aside className={style.tasksList}>
             <h2>Tasks of the day</h2>
