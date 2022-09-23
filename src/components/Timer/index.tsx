@@ -3,28 +3,40 @@ import  Clock  from "./Clock";
 import style from './Timer.module.scss'
 import {timeToSeconds} from '../../common/utils/time'
 import { ITask } from "../../types/tasks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props{
     selected: ITask | undefined
+    finishTask: () => void
 }
 
-export default function Timer({selected}:Props){
+export default function Timer({selected, finishTask}:Props){
     
     const [time, setTime] = useState<number>();
-    if(selected?.time){
-        setTime(timeToSeconds(selected.time));
+    useEffect(() => {
+        if(selected?.time){
+            setTime(timeToSeconds(selected?.time));
+        }
+    },[selected]);
+
+    function regressive(counter: number = 0){
+        setTimeout(() => {
+            if(counter > 0){
+                setTime(counter - 1);
+                return regressive(counter - 1)
+            }
+            finishTask();
+        }, 1000);
     }
     return(
         <div className={style.timer}>
             <p className={style.title}>
                 Choose a card and start the timer
-                Time: {time}
             </p>
             <div className={style.clockWrapper}>
-                <Clock/>
+                <Clock time={time}/>
             </div>
-            <Button>
+            <Button onClick={() => regressive(time)}>
                 Start!
             </Button>
         </div>
